@@ -1,0 +1,5 @@
+{
+  "name": "Household Finance",
+  "description": "Offline-First PWA for tracking household expenses and transfers across multiple accounts.",
+  "requestFramePermissions": []
+}
