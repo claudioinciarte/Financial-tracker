@@ -1,46 +1,24 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import MobileInput from './pages/MobileInput';
-import Dashboard from './pages/Dashboard';
-import Transfer from './pages/Transfer';
-import Auth from './pages/Auth';
-import Budgets from './pages/Budgets';
-import History from './pages/History';
-import CSVReconciler from './pages/CSVReconciler';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ExpenseForm } from './components/ExpenseForm'
+import { Dashboard } from './components/Dashboard'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const queryClient = new QueryClient()
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/auth" />;
-  return <>{children}</>;
-};
-
-export default function App() {
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<ProtectedRoute><MobileInput /></ProtectedRoute>} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/transfer" element={<ProtectedRoute><Transfer /></ProtectedRoute>} />
-            <Route path="/budgets" element={<ProtectedRoute><Budgets /></ProtectedRoute>} />
-            <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-            <Route path="/reconcile" element={<ProtectedRoute><CSVReconciler /></ProtectedRoute>} />
-          </Routes>
-        </Router>
-      </AuthProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4">
+        <header className="text-center mb-8">
+          <h1 className="text-4xl font-bold mb-2">💰 Economía de Guerra</h1>
+          <p className="text-slate-400">Hogar Jose - Offline PWA</p>
+        </header>
+        <main className="max-w-2xl mx-auto space-y-8">
+          <ExpenseForm />
+          <Dashboard />
+        </main>
+      </div>
     </QueryClientProvider>
-  );
+  )
 }
+
+export default App
